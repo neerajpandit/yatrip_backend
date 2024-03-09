@@ -1,6 +1,7 @@
 # myapp/urls.py
 from django.urls import path
-
+from django.conf import settings
+from django.conf.urls.static import static
 from app.views import PlaceListCreateView, PlaceRetrieveUpdateDestroyView,VideoUploadAPIView,TeacherApiView,SpiritualApiView,NatureApiView,CulturalApiView,AdventureApiView,WildLifeApiView,PopularDestinationApiView
 
 urlpatterns = [
@@ -23,6 +24,8 @@ urlpatterns = [
     path('wildlife/', WildLifeApiView.as_view(), name='wildlife'),
 
     path('cultural/', CulturalApiView.as_view(), name='cultural'),
-    
+
     path('populardestination/', PopularDestinationApiView.as_view(), name='populardestination')
-]
+
+    
+]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
