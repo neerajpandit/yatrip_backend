@@ -3,8 +3,14 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from app.views import PlaceListCreateView, PlaceRetrieveUpdateDestroyView,VideoUploadAPIView,TeacherApiView,SpiritualApiView,NatureApiView,CulturalApiView,AdventureApiView,WildLifeApiView,PopularDestinationApiView
-
+from . import views
 urlpatterns = [
+
+    path('', views.simple_response, name='simple_response'),
+    path('/', views.simple_response, name='simple_response'),
+
+
+
     path('upload-video/', VideoUploadAPIView.as_view(), name='upload_video'),
 
     path('upload-video/<int:pk>/', VideoUploadAPIView.as_view(), name='video-update'),

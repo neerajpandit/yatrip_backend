@@ -16,6 +16,12 @@ from .models import Video,Teacher,Spiritual,Adventure,Cultural,WildLife,PopularD
 from .serializers import VideoSerializer,TeacherSerializer,SpiritualSerializer,AdventureSerializer,CulturalSerializer,WildLifeSerializer,PopularDestinationSerializer,NatureSerializer
 
 
+from django.http import HttpResponse
+
+def simple_response(request):
+    message = "Hello, YaTrip user its a Backend Side PLease use a valid url"  # Your message here
+    return HttpResponse(message)
+
 #hero Section Video
 class VideoUploadAPIView(APIView):
     def post(self, request, format=None):
@@ -383,3 +389,4 @@ class PlaceListCreateView(generics.ListCreateAPIView):
 class PlaceRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Place.objects.all()
     serializer_class = PlaceSerializer
+
