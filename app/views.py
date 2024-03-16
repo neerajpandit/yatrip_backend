@@ -12,8 +12,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 import cloudinary.uploader
-from .models import Video,Teacher,Spiritual,Adventure,Cultural,WildLife,PopularDestination,Nature
-from .serializers import VideoSerializer,TeacherSerializer,SpiritualSerializer,AdventureSerializer,CulturalSerializer,WildLifeSerializer,PopularDestinationSerializer,NatureSerializer
+from .models import Video,Teacher,Spiritual,Adventure,Cultural,WildLife,PopularDestination,Nature,MostVisit,About,AllMonth
+from .serializers import VideoSerializer,TeacherSerializer,SpiritualSerializer,AdventureSerializer,CulturalSerializer,WildLifeSerializer,PopularDestinationSerializer,NatureSerializer,MostVisitSerializer,AboutSerializer,AllMonthSerializer
 
 
 from django.http import HttpResponse
@@ -51,7 +51,7 @@ class VideoUploadAPIView(APIView):
     def put(self, request, pk, format=None):
         try:
             instance = self.get_object(pk)
-            serializer = SpiritualSerializer(instance, data=request.data)
+            serializer = VideoSerializer(instance, data=request.data)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data)
@@ -331,7 +331,6 @@ class PopularDestinationApiView(APIView):
         serializer = PopularDestinationSerializer(adventure, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-
     def put(self, request, pk, format=None):
         try:
             instance = self.get_object(pk)
@@ -369,10 +368,105 @@ class NatureApiView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+    def get(self,rerquest,format=None):
+        nature = Nature.objects.all()
+        serializer = NatureSerializer(nature, many=True)
+        return Response(serializer.data, status= status.HTTP_200_OK)
+
     def put(self, request, pk, format=None):
         try:
             instance = self.get_object(pk)
             serializer = NatureSerializer(instance, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class MostVisitApiView(APIView):
+    def post(self, request, format=None):
+        try:
+            image_file = request.FILES.get('image_file')
+            if not image_file:
+                return Response({'error': 'No image file provided'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            upload_result = cloudinary.uploader.upload(image_file, resource_type="image")
+            image_url = upload_result['secure_url']
+
+            serializer = MostVisitSerializer(data={
+                'name': request.data.get('name'),
+                'city_name': request.data.get('city_name'),
+                'state_name': request.data.get('state_name'),
+                'image_url': image_url
+            })
+
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def get(self,rerquest,format=None):
+        nature = MostVisit.objects.all()
+        serializer = MostVisitSerializer(nature, many=True)
+        return Response(serializer.data, status= status.HTTP_200_OK)
+
+    def put(self, request, pk, format=None):
+        try:
+            instance = self.get_object(pk)
+            serializer = MostVisitSerializer(instance, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class AboutCreateView(generics.ListCreateAPIView):
+    queryset = About.objects.all()
+    serializer_class = AboutSerializer
+
+class AboutRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = About.objects.all()
+    serializer_class = AboutSerializer
+
+class AllMonthApiView(APIView):
+    def post(self, request, format=None):
+        try:
+            image_file = request.FILES.get('image_file')
+            if not image_file:
+                return Response({'error': 'No image file provided'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            upload_result = cloudinary.uploader.upload(image_file, resource_type="image")
+            image_url = upload_result['secure_url']
+
+            serializer = AllMonthSerializer(data={
+                'name': request.data.get('name'),
+                'image_url': image_url
+            })
+
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def get(self,rerquest,format=None):
+        nature = AllMonth.objects.all()
+        serializer = AllMonthSerializer(nature, many=True)
+        return Response(serializer.data, status= status.HTTP_200_OK)
+
+    def put(self, request, pk, format=None):
+        try:
+            instance = self.get_object(pk)
+            serializer = AllMonthSerializer(instance, data=request.data)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data)

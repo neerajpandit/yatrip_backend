@@ -1,9 +1,17 @@
 # myapp/urls.py
 from django.urls import path
+from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
-from app.views import PlaceListCreateView, PlaceRetrieveUpdateDestroyView,VideoUploadAPIView,TeacherApiView,SpiritualApiView,NatureApiView,CulturalApiView,AdventureApiView,WildLifeApiView,PopularDestinationApiView
+from app.views import AboutCreateView,MostVisitApiView,PlaceListCreateView, PlaceRetrieveUpdateDestroyView,VideoUploadAPIView,TeacherApiView,SpiritualApiView,NatureApiView,CulturalApiView,AdventureApiView,WildLifeApiView,PopularDestinationApiView,AllMonthApiView
 from . import views
+
+
+admin.site.site_title = "Yatrip"
+admin.site.site_header = "Yatrip Admin DashBoard"
+admin.site.index_title = "Yatrip"
+
+
 urlpatterns = [
 
     path('', views.simple_response, name='simple_response'),
@@ -31,7 +39,11 @@ urlpatterns = [
 
     path('cultural/', CulturalApiView.as_view(), name='cultural'),
 
-    path('populardestination/', PopularDestinationApiView.as_view(), name='populardestination')
+    path('mostvisit/', MostVisitApiView.as_view(), name='mostvisit'),
 
-    
+    path('about/',AboutCreateView.as_view(),name='about'),
+
+    path('populardestination/', PopularDestinationApiView.as_view(), name='populardestination'),
+
+    path('allmonth/', AllMonthApiView.as_view(), name='allmonth' ),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

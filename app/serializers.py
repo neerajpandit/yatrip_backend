@@ -1,6 +1,6 @@
 # myapp/serializers.py
 from rest_framework import serializers
-from app.models import Place,Video,Teacher,Spiritual,PopularDestination,Nature,WildLife,Cultural,Adventure
+from app.models import Place,Video,Teacher,Spiritual,PopularDestination,Nature,WildLife,Cultural,Adventure,MostVisit,About,AllMonth
 import cloudinary.uploader
 
 
@@ -31,6 +31,12 @@ class PlaceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Place
         fields = ('id', 'name', 'img', 'description')
+
+class AboutSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = About
+        fields = ['id', 'title','description']
+
 
 
 class AdventureSerializer(serializers.ModelSerializer):
@@ -74,10 +80,36 @@ class WildLifeSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)  
 
 
+class AllMonthSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AllMonth
+        fields = ['id', 'name','image_url', 'image_file']
+
+    def update(self, instance, validated_data):
+        image_file = validated_data.pop('image_file', None)
+        if image_file:
+            upload_result = cloudinary.uploader.upload(image_file, resource_type="image")
+            instance.image_url = upload_result['secure_url']
+        return super().update(instance, validated_data)  
+
+
 
 class NatureSerializer(serializers.ModelSerializer):
     class Meta:
         model = Nature
+        fields = ['id', 'name', 'city_name', 'state_name', 'image_url', 'image_file']
+
+    def update(self, instance, validated_data):
+        image_file = validated_data.pop('image_file', None)
+        if image_file:
+            upload_result = cloudinary.uploader.upload(image_file, resource_type="image")
+            instance.image_url = upload_result['secure_url']
+        return super().update(instance, validated_data)  
+
+
+class MostVisitSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MostVisit
         fields = ['id', 'name', 'city_name', 'state_name', 'image_url', 'image_file']
 
     def update(self, instance, validated_data):

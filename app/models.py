@@ -104,6 +104,28 @@ class PopularDestination(models.Model):
         return self.name
 
 
+class AllMonth(models.Model):
+    name = models.CharField(max_length=100)
+    image_url = models.URLField(blank=True)
+    image_file = models.ImageField(upload_to='nature_images/', blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        if self.pk:  # If the instance already exists (updating)
+            original = Nature.objects.get(pk=self.pk)
+            if self.image_file and self.image_file != original.image_file:
+                # Image file has been changed, upload to Cloudinary and update image_url
+                upload_result = cloudinary.uploader.upload(self.image_file, resource_type="image")
+                self.image_url = upload_result['secure_url']
+        else:  # If creating a new instance
+            if self.image_file:
+                upload_result = cloudinary.uploader.upload(self.image_file, resource_type="image")
+                self.image_url = upload_result['secure_url']
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+
+
 class Nature(models.Model):
     name = models.CharField(max_length=100)
     city_name = models.CharField(max_length=100)
@@ -126,6 +148,38 @@ class Nature(models.Model):
 
     def __str__(self):
         return self.name
+
+class MostVisit(models.Model):
+    name = models.CharField(max_length=100)
+    city_name = models.CharField(max_length=100)
+    state_name = models.CharField(max_length=100)
+    image_url = models.URLField(blank=True)
+    image_file = models.ImageField(upload_to='nature_images/', blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        if self.pk:  # If the instance already exists (updating)
+            original = MostVisit.objects.get(pk=self.pk)
+            if self.image_file and self.image_file != original.image_file:
+                # Image file has been changed, upload to Cloudinary and update image_url
+                upload_result = cloudinary.uploader.upload(self.image_file, resource_type="image")
+                self.image_url = upload_result['secure_url']
+        else:  # If creating a new instance
+            if self.image_file:
+                upload_result = cloudinary.uploader.upload(self.image_file, resource_type="image")
+                self.image_url = upload_result['secure_url']
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+
+
+class About(models.Model):
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+
+    def __str__(self):
+        return self.title
+
 
 
 

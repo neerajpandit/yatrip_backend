@@ -3,15 +3,28 @@ from django.contrib import admin
 # Register your models here.
 # myapp/admin.py
 from django.contrib import admin
-from app.models import Place,Teacher,Video,Spiritual,Cultural,Adventure,WildLife,Nature,PopularDestination
+from app.models import Place,Teacher,Video,Spiritual,Cultural,Adventure,WildLife,Nature,PopularDestination,MostVisit,About,AllMonth
 
 @admin.register(PopularDestination)
 class PopularDestinationAdmin(admin.ModelAdmin):
     list_display = ('name', 'city_name', 'state_name', 'image_url')
 
+@admin.register(About)
+class AboutAdmin(admin.ModelAdmin):
+    list_display=('title','description')
+
+@admin.register(AllMonth)
+class AllMonthAdmin(admin.ModelAdmin):
+    list_display=('id','name','image_url')
+
 @admin.register(Nature)
 class NatureAdmin(admin.ModelAdmin):
     list_display = ('name', 'city_name', 'state_name', 'image_url')
+
+@admin.register(MostVisit)
+class MostVisitAdmin(admin.ModelAdmin):
+    list_display = ('name', 'city_name', 'state_name', 'image_url')
+
 
 @admin.register(WildLife)
 class WildLifeAdmin(admin.ModelAdmin):

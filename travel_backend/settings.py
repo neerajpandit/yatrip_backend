@@ -20,14 +20,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("SECRET_KEY")
+# SECRET_KEY = os.environ.get("SECRET_KEY")
+# SECRET_KEY="django-insecure-c742)h-iq%u^^whrn@pk^oi6=(nujy04u$@vm03$aj)t+kyeq)"
+
 # 'django-insecure-c742)h-iq%u^^whrn@pk^oi6=(nujy04u$@vm03$aj)t+kyeq)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 
 ALLOWED_HOSTS =os.environ.get("ALLOWED_HOSTS").split(" ")
-#ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -160,3 +162,4 @@ cloudinary.config(
     api_secret=os.environ.get("API_SECRET")
     #'vEWPN--jiPkcXNR3qDWH4mpRQH8'
 )
+
