@@ -3,9 +3,9 @@ from django.urls import path
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
-from app.views import AboutCreateView,MostVisitApiView,PlaceListCreateView, PlaceRetrieveUpdateDestroyView,VideoUploadAPIView,TeacherApiView,SpiritualApiView,NatureApiView,CulturalApiView,AdventureApiView,WildLifeApiView,PopularDestinationApiView,AllMonthApiView
+from app.views import SignInView,LogoutView,SignUpView,AboutCreateView,MostVisitApiView,PlaceListCreateView, PlaceRetrieveUpdateDestroyView,VideoUploadAPIView,TeacherApiView,SpiritualApiView,NatureApiView,CulturalApiView,AdventureApiView,WildLifeApiView,PopularDestinationApiView,AllMonthApiView
 from . import views
-
+# from .views import register, login_view, logout_view
 
 admin.site.site_title = "Yatrip"
 admin.site.site_header = "Yatrip Admin DashBoard"
@@ -15,8 +15,11 @@ admin.site.index_title = "Yatrip"
 urlpatterns = [
 
     path('', views.simple_response, name='simple_response'),
-    path('/', views.simple_response, name='simple_response'),
+    path('as', views.simple_response, name='simple_response'),
 
+    path('signup/', SignUpView.as_view(), name='signup'),
+    path('signin/', SignInView.as_view(), name='signin'),
+    path('logout/', LogoutView.as_view(), name='logout'),
 
 
     path('upload-video/', VideoUploadAPIView.as_view(), name='upload_video'),

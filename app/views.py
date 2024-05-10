@@ -8,21 +8,67 @@ from .serializers import PlaceSerializer
 # views.py
 from django.shortcuts import render
 from django.http import JsonResponse
-from rest_framework import status
+from rest_framework import status,permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 import cloudinary.uploader
 from .models import Video,Teacher,Spiritual,Adventure,Cultural,WildLife,PopularDestination,Nature,MostVisit,About,AllMonth
-from .serializers import VideoSerializer,TeacherSerializer,SpiritualSerializer,AdventureSerializer,CulturalSerializer,WildLifeSerializer,PopularDestinationSerializer,NatureSerializer,MostVisitSerializer,AboutSerializer,AllMonthSerializer
+from .serializers import UserSerializer,VideoSerializer,TeacherSerializer,SpiritualSerializer,AdventureSerializer,CulturalSerializer,WildLifeSerializer,PopularDestinationSerializer,NatureSerializer,MostVisitSerializer,AboutSerializer,AllMonthSerializer
 
-
+# from rest_framework.authtoken.models import Token
+from rest_framework.authtoken.models import Token
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
+from django.contrib.auth import logout
 from django.http import HttpResponse
-
+import logging
 def simple_response(request):
     message = "Hello, YaTrip user its a Backend Side PLease use a valid url"  # Your message here
     return HttpResponse(message)
 
-#hero Section Video
+class SignUpView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({'message': 'User created successfully'}, status=status.HTTP_201_CREATED)  
+
+
+class SignInView(generics.CreateAPIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        username = request.data.get('username')
+        password = request.data.get('password')
+
+        user = authenticate(username=username, password=password)
+
+        if user is not None:
+            return Response({'message': 'Authentication successful'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+
+
+class LogoutView(generics.GenericAPIView):
+    permission_classes = [permissions.AllowAny]  # Allow unauthenticated requests
+
+    def post(self, request, *args, **kwargs):
+        if 'sessionid' not in request.COOKIES:
+            return Response({'error': 'No session cookie found'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        if request.user.is_authenticated:
+            logout(request)
+            return Response({'message': 'Logout successful'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'User is not authenticated'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
 class VideoUploadAPIView(APIView):
     def post(self, request, format=None):
         try:

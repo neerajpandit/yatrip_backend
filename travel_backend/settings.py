@@ -19,14 +19,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("SECRET_KEY")
-# SECRET_KEY="django-insecure-c742)h-iq%u^^whrn@pk^oi6=(nujy04u$@vm03$aj)t+kyeq)"
+SECRET_KEY="django-insecure-c742)h-iq%u^^whrn@pk^oi6=(nujy04u$@vm03$aj)t+kyeq)"
 
-# 'django-insecure-c742)h-iq%u^^whrn@pk^oi6=(nujy04u$@vm03$aj)t+kyeq)'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
+DEBUG = True
+#os.environ.get("DEBUG", "False").lower() == "true"
 
 ALLOWED_HOSTS =os.environ.get("ALLOWED_HOSTS","*").split(" ")
 # ALLOWED_HOSTS = ['*']
@@ -41,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
     'corsheaders',
     'app',
 ]
@@ -88,6 +85,7 @@ DATABASES = {
     }
 }
 database_url = os.environ.get("DATBASE_URL")
+#database_url="postgres://yatrip_database_user:3lsR2gfCIAQp1pxwwoWpnXAEEkpMwdjy@dpg-cnqn19md3nmc7394h6e0-a.oregon-postgres.render.com/yatrip_database"
 DATABASES["default"]= dj_database_url.parse(database_url)
 
 # Password validation
